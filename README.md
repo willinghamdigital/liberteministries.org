@@ -16,7 +16,9 @@ Open the URL printed by Astro, including `/liberteministries.org/`. `make help` 
 ## Editing
 
 - Site templates and styles: `site/src/`.
-- Migrated page content: `site/src/data/content.json`.
+- Original page and post layouts: `site/src/data/wordpress.json` and `wordpress-posts.json`.
+- Original self-hosted CSS, fonts, and image variants: `site/public/wordpress/`.
+- Native menu, accordion, slider, and entrance animations: `site/src/scripts/interactions.ts`.
 - Local photographs and other assets: `site/public/`.
 - Deployment: `.github/workflows/deploy.yml`.
 
@@ -24,9 +26,11 @@ Keep internal links and image paths compatible with Astro's configured base path
 
 ### Donations, contact, and newsletter
 
-Donations keep the existing Donorbox campaign, with a hosted-form link as a fallback. Contact goes to `arvy@liberteministries.org`.
+Donations keep the existing Donorbox campaign. Contact goes to `arvy@liberteministries.org`.
 
-The old newsletter form uses Mailchimp for WordPress (form 762). Its public HTML posts to WordPress and does not expose a direct Mailchimp subscription endpoint. The email field and signup button are implemented in `site/src/components/Newsletter.astro`: set the public Mailchimp embed `action` URL and honeypot field name in `site/src/data/newsletter.json` to enable them. Do not put a Mailchimp API key in this file. Until configured, visitors see an explicit email signup request link to Arvy and the newsletter archive. Automatic Mailchimp subscription is not yet connected.
+The native email form in `site/src/components/Newsletter.astro` posts directly to the Liberté Ministries Mailchimp audience identified by the supplied [signup page](https://mailchi.mp/tshows/sms-signup). Public form settings live in `site/src/data/newsletter.json`; no API key or WordPress backend is needed. The form retains the original site's email field and button and sets the newsletter preference. Mailchimp handles confirmation in a new tab. The supplied landing page also offers SMS signup; the site's existing newsletter form collects email only.
+
+The original Elementor HTML and CSS are retained as static assets to preserve the WordPress design. Small native browser scripts replace the WordPress plugin runtime for entrance animations, the mobile menu, FAQs, and testimonial slides. Reduced-motion preferences are respected. No PHP, WordPress APIs, or WordPress JavaScript run on the published site.
 
 The migration preserves 39 published posts, 11 content pages plus the homepage and news index, and their available public assets. Four old newsletter posts have no attachment in the source; their available text is retained. Original PDF download URLs are preserved. Old `give.html`, `contact.html`, and `go.html` links redirect to their current pages.
 

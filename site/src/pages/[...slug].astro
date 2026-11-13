@@ -1,118 +1,19 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import content from "../data/content.json";
-import { url, localizeHtml, aboutLinks, ministryLinks } from "../lib/links";
-
+import wordpress from "../data/wordpress.json";
+import posts from "../data/wordpress-posts.json";
+import { renderWordpress } from "../lib/wordpress.mjs";
 export function getStaticPaths() {
-  return [...content.pages, ...content.posts]
-    .filter((page) => page.path && page.path !== "blog/")
+  return [...wordpress.pages, ...posts.pages]
+    .filter((page) => page.path)
     .map((page) => ({
       params: { slug: page.path.replace(/^\/+|\/+$/g, "") },
-      props: {
-        page,
-        isPost: content.posts.some((post) => post.path === page.path),
-      },
+      props: { page },
     }));
 }
-const { page, isPost } = Astro.props;
-const isDonation = page.path.replace(/\/$/, "") === "donations";
-const related = page.path.startsWith("about")
-  ? aboutLinks
-  : page.path.startsWith("ministries")
-    ? ministryLinks
-    : [];
-const date = "date" in page ? page.date : undefined;
+const { page } = Astro.props;
 ---
 
-<BaseLayout
-  title={page.title}
-  description={page.description || undefined}
-  image={page.image || undefined}
->
-  <div class="page-heading">
-    <div class="container">
-      <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href={url()}>Home</a>
-        <span aria-hidden="true">/</span>
-        {isPost && (
-          <>
-            <a href={url("blog/")}>News</a>
-            <span aria-hidden="true">/</span>
-          </>
-        )}
-        <span>{page.title}</span>
-      </nav>
-      <h1>{page.title}</h1>
-      {date && (
-        <p class="post-date">
-          <time datetime={date}>
-            {new Date(date).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-              timeZone: "UTC",
-            })}
-          </time>
-        </p>
-      )}
-    </div>
-  </div>
-  <div
-    class:list={[
-      "container content-layout",
-      { "with-sidebar": related.length > 0, "donation-layout": isDonation },
-    ]}
-  >
-    <article class="prose" set:html={localizeHtml(page.html)} />
-    {related.length > 0 && (
-      <aside class="related">
-        <h2>
-          {page.path.startsWith("about") ? "About Liberté" : "Our ministries"}
-        </h2>
-        <nav aria-label="Related pages">
-          {related.map((item) => (
-            <a
-              href={url(item.path)}
-              aria-current={
-                page.path.replace(/\/$/, "") === item.path.replace(/\/$/, "")
-                  ? "page"
-                  : undefined
-              }
-            >
-              {item.label}
-              <span aria-hidden="true">→</span>
-            </a>
-          ))}
-        </nav>
-        <a class="button" href={url("donations/")}>
-          Support the work
-        </a>
-      </aside>
-    )}
-    {isDonation && (
-      <section class="donation-form" aria-label="Give through Donorbox">
-        <a
-          class="button"
-          href="https://donorbox.org/liberte"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Give securely on Donorbox ↗
-        </a>
-        <p>Give here, or open the secure form in a new tab.</p>
-        <iframe
-          src="https://donorbox.org/embed/liberte?default_interval=o"
-          title="Donate to Liberté Ministries through Donorbox"
-          height="950"
-          loading="lazy"
-          allow="payment"
-        />
-      </section>
-    )}
-  </div>
-  {isPost && (
-    <div class="container back-link">
-      <a href={url("blog/")}>← All news and newsletters</a>
-    </div>
-  )}
+<BaseLayout title={page.title} source={page}>
+  <Fragment set:html={renderWordpress(page.html, page.path)} />
 </BaseLayout>

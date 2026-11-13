@@ -1,0 +1,192 @@
+/* Small replacements for interactive WordPress widgets. Original styles are local. */
+.native-carousel [hidden] {
+  display: none !important;
+}
+html:not(.motion-ready) .elementor-invisible {
+  visibility: visible !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .elementor-invisible {
+    visibility: visible !important;
+  }
+  .animated {
+    animation: none !important;
+  }
+}
+.native-newsletter .newsletter-trap {
+  position: absolute;
+  left: -5000px;
+}
+.native-newsletter input[type="email"] {
+  width: 100%;
+}
+.native-contact-email {
+  color: inherit;
+  overflow-wrap: anywhere;
+}
+.elementor-nav-menu--main
+  .elementor-nav-menu
+  .menu-item-has-children:hover
+  > .sub-menu,
+.elementor-nav-menu--main
+  .elementor-nav-menu
+  .menu-item-has-children:focus-within
+  > .sub-menu {
+  display: block;
+  top: 100%;
+  left: 0;
+  min-width: 220px;
+  z-index: 10;
+}
+.elementor-nav-menu--main .sub-menu a {
+  white-space: nowrap;
+}
+.native-menu:not([open]) {
+  display: none;
+}
+.native-menu {
+  padding: 0;
+  border: 0;
+  margin: 0 auto;
+  height: 100dvh;
+  max-height: none;
+  width: 366px;
+  max-width: 100vw;
+  overflow-y: auto;
+  background: #fff;
+}
+.native-menu[open] {
+  display: flex;
+  align-items: center;
+  animation: slideInLeft 1.2s both;
+}
+.native-menu::backdrop {
+  background: rgba(0, 0, 0, 0.8);
+}
+dialog.native-menu .native-menu-close {
+  position: absolute;
+  right: 8px;
+  top: 5px;
+  z-index: 5;
+  border: 0;
+  background: transparent;
+  color: #333;
+  padding: 3px 12px;
+  font: 28px/1.5 sans-serif;
+}
+.native-menu .elementor-menu-toggle {
+  display: none;
+}
+.native-menu .elementor-nav-menu__container {
+  display: block !important;
+  max-height: none !important;
+  transform: none !important;
+}
+.native-menu .sub-menu {
+  display: none !important;
+  padding-left: 15px !important;
+}
+.native-menu .submenu-open > .sub-menu {
+  display: block !important;
+}
+.native-menu > .elementor {
+  display: block;
+  width: 100%;
+}
+.native-menu .sub-menu a {
+  font-size: 15px !important;
+}
+body.menu-open {
+  overflow: hidden;
+}
+.native-accordion .pp-accordion-tab-content {
+  display: none;
+}
+.native-accordion .pp-accordion-tab-content.is-open {
+  display: block;
+}
+html:not(.ui-ready) .pp-accordion-tab-content {
+  display: block;
+}
+.native-carousel .swiper-wrapper {
+  display: flex;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  transform: none !important;
+}
+.native-carousel .swiper-wrapper::-webkit-scrollbar {
+  display: none;
+}
+.native-carousel .swiper-slide {
+  flex: 0 0 calc(100% / 3);
+  width: calc(100% / 3);
+  scroll-snap-align: start;
+  height: auto;
+}
+.native-carousel .slick-dots {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+}
+.native-carousel .slick-dots button {
+  border: 0;
+  padding: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ccc;
+}
+.native-carousel .slick-dots button[aria-current="true"] {
+  background: #924a39;
+}
+.native-carousel .carousel-pause {
+  display: block;
+  border: 0;
+  margin: 12px auto 0;
+  padding: 4px 8px;
+  background: transparent;
+  color: #78787b;
+  font: inherit;
+  font-size: 12px;
+}
+.eael-filter-gallery-container {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.eael-filter-gallery-container .eael-filterable-gallery-item-wrap {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  width: 100% !important;
+}
+.native-article {
+  width: min(1140px, calc(100% - 40px));
+  margin: 60px auto;
+}
+.native-article img {
+  max-width: 100%;
+  height: auto;
+}
+@media (max-width: 1024px) {
+  .native-carousel .swiper-slide {
+    flex-basis: 50%;
+    width: 50%;
+  }
+  .eael-filter-gallery-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 767px) {
+  .native-carousel .swiper-slide {
+    flex-basis: 100%;
+    width: 100%;
+  }
+  .eael-filter-gallery-container {
+    grid-template-columns: 1fr;
+  }
+}

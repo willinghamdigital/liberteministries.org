@@ -1,12 +1,13 @@
-import content from "../data/content.json";
+import wordpress from "../data/wordpress.json";
+import posts from "../data/wordpress-posts.json";
 import { url } from "../lib/links";
 export const prerender = true;
 export function GET({ site }: { site: URL }) {
   const paths = [
     "",
     "blog/",
-    ...content.pages.map((p) => p.path),
-    ...content.posts.map((p) => p.path),
+    ...wordpress.pages.map((p) => p.path),
+    ...posts.pages.map((p) => p.path),
   ];
   const entries = [...new Set(paths)]
     .map((path) => `<url><loc>${new URL(url(path), site).href}</loc></url>`)

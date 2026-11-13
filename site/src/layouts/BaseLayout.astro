@@ -1,35 +1,39 @@
 ---
-import "../styles/global.css";
-import {
-  url,
-  navigation,
-  aboutLinks,
-  ministryLinks,
-  contactEmail,
-  facebook,
-} from "../lib/links";
-import content from "../data/content.json";
+import "../styles/native.css";
 import Newsletter from "../components/Newsletter.astro";
+import wordpress from "../data/wordpress.json";
+import bundle from "../data/wordpress-styles.json";
+import { renderWordpress } from "../lib/wordpress.mjs";
+import { url } from "../lib/links";
 
 interface Props {
   title: string;
   description?: string;
   image?: string;
   noindex?: boolean;
+  source?: { path: string; bodyClass: string; styles?: string[] };
 }
 const {
   title,
   description = "Making disciples, building communities, and supporting education. Liberté Ministries serves alongside our brothers and sisters in Haiti.",
-  image,
+  image = "/images/IMG_7055-scaled.jpg",
   noindex = false,
+  source,
 } = Astro.props;
+const route =
+  source?.path ?? Astro.url.pathname.slice(import.meta.env.BASE_URL.length);
 const canonical = new URL(
   noindex ? url("404.html") : Astro.url.pathname,
   Astro.site,
 );
-const currentPath = Astro.url.pathname;
-const isCurrent = (path: string) => currentPath === url(path);
-const assets = content.assets;
+const styles = bundle.pageStyles[source?.path || ""] || bundle.pageStyles[""];
+const footer = renderWordpress(
+  wordpress.footerBeforeNewsletter +
+    "__NATIVE_NEWSLETTER__" +
+    wordpress.footerAfterNewsletter,
+  route,
+);
+const [footerBefore, footerAfter] = footer.split("__NATIVE_NEWSLETTER__");
 ---
 
 <!doctype html>
@@ -37,127 +41,49 @@ const assets = content.assets;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title} | Liberté Ministries</title>
+    <title>{title} - Liberte Ministries</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex" />}
-    <meta property="og:title" content={`${title} | Liberté Ministries`} />
+    <meta property="og:title" content={`${title} - Liberte Ministries`} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
-    <meta property="og:site_name" content="Liberté Ministries" />
-    <meta
-      property="og:image"
-      content={new URL(url(image || assets.hero), Astro.site)}
-    />
-    <meta name="theme-color" content="#8d4c37" />
-    <link rel="icon" href={url(assets.logo)} type="image/png" />
+    <meta property="og:image" content={new URL(url(image), Astro.site)} />
+    <link rel="icon" href={url("images/lm-logo.png")} type="image/png" />
+    {styles.map((style) => (
+      <link rel="stylesheet" href={url(style)} />
+    ))}
+    <script is:inline>
+      if (
+        "IntersectionObserver" in window &&
+        !matchMedia("(prefers-reduced-motion: reduce)").matches
+      )
+        document.documentElement.classList.add("motion-ready");
+    </script>
   </head>
-  <body>
-    <a class="skip-link" href="#main">
+  <body
+    class={
+      source?.bodyClass ||
+      "elementor-default elementor-template-full-width elementor-kit-10"
+    }
+  >
+    <a class="skip-link screen-reader-text" href="#content">
       Skip to content
     </a>
-    <header class="site-header">
-      <div class="container header-inner">
-        <a class="brand" href={url()} aria-label="Liberté Ministries home">
-          <img
-            src={url(assets.logo)}
-            alt="Liberté Ministries"
-            width="150"
-            height="92"
-          />
-        </a>
-        <nav class="desktop-nav" aria-label="Main navigation">
-          {navigation.map((item) => (
-            <a
-              href={url(item.path)}
-              aria-current={isCurrent(item.path) ? "page" : undefined}
-            >
-              {item.label}
-            </a>
-          ))}
-          <a class="button" href={url("donations/")}>
-            Donate now
-          </a>
-        </nav>
-        <details class="mobile-menu">
-          <summary>
-            Menu <span aria-hidden="true">☰</span>
-          </summary>
-          <nav aria-label="Mobile navigation">
-            {navigation.map((item) => (
-              <a
-                href={url(item.path)}
-                aria-current={isCurrent(item.path) ? "page" : undefined}
-              >
-                {item.label}
-              </a>
-            ))}
-            <a href={url("donations/")}>Donate now</a>
-          </nav>
-        </details>
-      </div>
-    </header>
-    <main id="main">
+    <Fragment set:html={renderWordpress(wordpress.header, route)} />
+    <main id="content">
       <slot />
     </main>
-    <footer class="site-footer">
-      <div class="container footer-grid">
-        <div>
-          <a class="footer-brand" href={url()}>
-            <img
-              src={url(assets.logoWhite)}
-              alt="Liberté Ministries"
-              width="180"
-              height="110"
-              loading="lazy"
-            />
-          </a>
-          <p>
-            Freedom in Christ.
-            <br />
-            Freedom in education.
-            <br />
-            Freedom in economic self-sufficiency.
-          </p>
-          <a href={facebook}>
-            Follow us on Facebook <span aria-hidden="true">↗</span>
-          </a>
-        </div>
-        <div>
-          <h2>Explore</h2>
-          <ul class="footer-links">
-            {aboutLinks.map((item) => (
-              <li>
-                <a href={url(item.path)}>{item.label}</a>
-              </li>
-            ))}
-          </ul>
-          <h2>Our ministries</h2>
-          <ul class="footer-links">
-            {ministryLinks.map((item) => (
-              <li>
-                <a href={url(item.path)}>{item.label}</a>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <section id="contact">
-            <h2>Contact us</h2>
-            <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
-            <address>
-              6870 County Road 200
-              <br />
-              Florence, AL 35633
-            </address>
-          </section>
-          <Newsletter />
-        </div>
-      </div>
-      <div class="container footer-bottom">
-        © {new Date().getFullYear()} Liberté Ministries. All rights reserved.
-      </div>
-    </footer>
+    <Fragment set:html={footerBefore} />
+    <Newsletter />
+    <Fragment set:html={footerAfter} />
+    <dialog id="mobile-menu" class="native-menu" aria-label="Main navigation">
+      <button type="button" class="native-menu-close" aria-label="Close menu">
+        ×
+      </button>
+      <Fragment set:html={renderWordpress(wordpress.mobileMenu, route)} />
+    </dialog>
+    <script src="../scripts/interactions.ts"></script>
   </body>
 </html>

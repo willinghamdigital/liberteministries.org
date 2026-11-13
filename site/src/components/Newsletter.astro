@@ -1,50 +1,54 @@
 ---
 import newsletter from "../data/newsletter.json";
-import { contactEmail, url } from "../lib/links";
 ---
 
-<section id="newsletter">
-  <h2>Newsletter</h2>
-  <p>Stay connected with our work in Haiti.</p>
-  {newsletter.formAction ? (
-    <form
-      action={newsletter.formAction}
-      method="post"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="newsletter-form"
-    >
-      <label for="newsletter-email">Your email address</label>
+<form
+  class="mc4wp-form native-newsletter"
+  action={newsletter.formAction}
+  method="post"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Newsletter signup"
+>
+  <input type="hidden" name="u" value={newsletter.userId} />
+  <input type="hidden" name="id" value={newsletter.audienceId} />
+  <input
+    type="hidden"
+    name="MERGE5"
+    value="I want to subscribe to the Newsletter"
+  />
+  <div class="mc4wp-form-fields">
+    <p>
+      <label for="newsletter-email" class="screen-reader-text">
+        Your email address
+      </label>
       <input
         id="newsletter-email"
         type="email"
-        name="EMAIL"
+        name="MERGE0"
         placeholder="Your email address"
         autocomplete="email"
         required
       />
-      {newsletter.honeypotField && (
-        <div class="newsletter-trap" aria-hidden="true">
-          <input
-            type="text"
-            name={newsletter.honeypotField}
-            tabindex="-1"
-            autocomplete="off"
-          />
-        </div>
-      )}
-      <button class="button" type="submit">
-        Sign up
-      </button>
-    </form>
-  ) : (
-    <p>
-      <a href={`mailto:${contactEmail}?subject=Newsletter%20signup%20request`}>
-        Email Arvy to request newsletter signup
-      </a>
     </p>
-  )}
-  <a href={url("blog/")}>
-    Read our newsletters <span aria-hidden="true">→</span>
-  </a>
-</section>
+    <p>
+      <input type="submit" value="Sign up" />
+    </p>
+    <div class="newsletter-trap" aria-hidden="true">
+      <input
+        type="text"
+        name="b_name"
+        value=""
+        tabindex="-1"
+        autocomplete="off"
+      />
+      <input
+        type="email"
+        name="b_email"
+        value=""
+        tabindex="-1"
+        autocomplete="off"
+      />
+    </div>
+  </div>
+</form>
