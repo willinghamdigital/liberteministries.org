@@ -1,0 +1,18 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { url } from "../lib/links";
+---
+
+<BaseLayout title="Page not found" noindex>
+  <section class="container section not-found">
+    <p class="eyebrow">404</p>
+    <h1>Page not found</h1>
+    <p>
+      The page may have moved. Find our ministries, news, and ways to help from
+      the home page.
+    </p>
+    <a class="button" href={url()}>
+      Return home
+    </a>
+  </section>
+</BaseLayout>
