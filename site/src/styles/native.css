@@ -17,8 +17,26 @@ html:not(.motion-ready) .elementor-invisible {
   position: absolute;
   left: -5000px;
 }
-.native-newsletter input[type="email"] {
+.native-newsletter .mc-field-group {
+  margin-bottom: 16px;
+}
+.native-newsletter .mc-field-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #fff;
+}
+.native-newsletter .mc-field-group input {
   width: 100%;
+}
+.native-newsletter .response {
+  margin-bottom: 16px;
+  overflow-wrap: anywhere;
+  color: #fff;
+}
+.native-newsletter .response a {
+  color: inherit;
+  text-decoration: underline;
 }
 .native-contact-email {
   color: inherit;
